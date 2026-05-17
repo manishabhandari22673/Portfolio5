@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manisha Bhandari — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080b12;
+      --bg2:          #0c1020;
+      --bg3:          #0f1428;
+      --card:         #111827;
+      --border:       rgba(94,181,255,.12);
+      --border-glow:  rgba(94,181,255,.3);
+      --ink:          #e8f0ff;
+      --ink-mid:      #8fa3cc;
+      --ink-muted:    #4f6180;
+      --teal:         #5eb5ff;
+      --teal-dim:     rgba(94,181,255,.12);
+      --teal-glow:    rgba(94,181,255,.35);
+      --pink:         #f472b6;
+      --shadow:       0 8px 40px rgba(0,0,0,.55);
+      --radius:       14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 6vw;
+      background: rgba(8,11,18,.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: border-color .3s, box-shadow .3s;
+    }
+    nav.scrolled { border-color: var(--border-glow); box-shadow: 0 2px 40px rgba(94,181,255,.08); }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--ink); text-decoration: none;
+    }
+    .nav-logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--ink-mid);
+      text-decoration: none; position: relative; padding-bottom: 2px;
+      transition: color .25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: 0;
+      width: 0; height: 1px; background: var(--teal); transition: width .3s;
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: .3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 99;
+      background: var(--bg); flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700;
+      color: var(--ink); text-decoration: none; transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--teal); }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 6vw 5rem;
+      position: relative; overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px);
+    }
+    .orb-1 {
+      width: 640px; height: 640px;
+      background: radial-gradient(circle, rgba(94,181,255,.16) 0%, transparent 70%);
+      top: -120px; right: -120px;
+      animation: drift 13s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(244,114,182,.1) 0%, transparent 70%);
+      bottom: 0; left: 4%;
+      animation: drift 17s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-45px) scale(1.06); }
+    }
+    .hero-inner {
+      position: relative; z-index: 1; max-width: 780px;
+      opacity: 0; transform: translateY(32px);
+      animation: fadeUp 1s .15s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .4rem 1rem;
+      background: rgba(94,181,255,.1); border: 1px solid var(--border-glow);
+      border-radius: 100px; font-size: .78rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--teal);
+      margin-bottom: 1.8rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 9vw, 7rem);
+      font-weight: 700; line-height: 1.04; letter-spacing: -.02em;
+      color: var(--ink); margin-bottom: 1.6rem;
+    }
+    h1 .hl {
+      background: linear-gradient(100deg, var(--teal), var(--pink));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.08rem; font-weight: 300; color: var(--ink-mid);
+      max-width: 500px; margin-bottom: 3rem; line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .9rem 2rem;
+      background: linear-gradient(135deg, var(--teal), #38bdf8);
+      color: #060a14; font-weight: 600; font-size: .9rem;
+      border-radius: 100px; text-decoration: none; letter-spacing: .02em;
+      box-shadow: 0 0 28px rgba(94,181,255,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 48px rgba(94,181,255,.55); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .9rem 2rem;
+      border: 1px solid var(--border-glow); color: var(--ink-mid);
+      font-weight: 500; font-size: .9rem; border-radius: 100px; text-decoration: none;
+      transition: border-color .25s, color .25s, background .25s;
+    }
+    .btn-ghost:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 6rem 6vw; position: relative; z-index: 1; }
+    .stag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--teal); font-weight: 600; margin-bottom: 1rem;
+    }
+    .stag::before { content: '//'; opacity: .5; }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; line-height: 1.15; color: var(--ink); margin-bottom: .75rem;
+    }
+    .ubar {
+      width: 52px; height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--pink));
+      margin-bottom: 3rem;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--bg2); }
+    #about::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 50% 80% at 0% 50%, rgba(94,181,255,.05) 0%, transparent 60%);
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.7fr; gap: 5rem; align-items: center; max-width: 960px;
+    }
+    .about-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 2.5rem 1.8rem; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; gap: 1.3rem;
+      box-shadow: var(--shadow);
+    }
+    .about-card::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 130px; height: 130px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(94,181,255,.18), transparent 70%);
+    }
+    .avatar-ring {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--pink)); padding: 3px; flex-shrink: 0;
+    }
+    .avatar-inner {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--teal);
+    }
+    .acard-name { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--ink); text-align: center; }
+    .acard-role { font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); text-align: center; }
+    .astat {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+      padding: .75rem 1rem; font-size: .82rem; color: var(--ink-mid);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .astat svg { width: 15px; height: 15px; color: var(--teal); flex-shrink: 0; }
+    .about-text p { font-size: 1.03rem; font-weight: 300; color: var(--ink-mid); line-height: 1.85; margin-bottom: 1.1rem; }
+    .about-text strong { color: var(--ink); font-weight: 600; }
+
+    /* ─── EXPERIENCE ─── */
+    #experience { background: var(--bg); }
+    #experience::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 40% 60% at 100% 50%, rgba(244,114,182,.05) 0%, transparent 60%);
+    }
+    .exp-card {
+      max-width: 780px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2.5rem; box-shadow: var(--shadow);
+      position: relative; overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .exp-card:hover { border-color: var(--border-glow); box-shadow: 0 8px 52px rgba(94,181,255,.1); }
+    .exp-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--pink));
+    }
+    .exp-head { display: flex; align-items: flex-start; gap: 1.2rem; margin-bottom: 1.2rem; }
+    .exp-ico {
+      width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(94,181,255,.18), rgba(244,114,182,.12));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .exp-ico svg { width: 22px; height: 22px; color: var(--teal); }
+    .exp-role { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 700; color: var(--ink); margin-bottom: .3rem; }
+    .exp-org { font-size: .8rem; letter-spacing: .08em; color: var(--teal); font-weight: 500; }
+    .exp-desc { font-size: .97rem; font-weight: 300; color: var(--ink-mid); line-height: 1.8; }
+
+    /* ─── PROJECTS ─── */
+    #projects { background: var(--bg2); }
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; max-width: 960px; }
+    .proj-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 2rem; box-shadow: var(--shadow); position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+    }
+    .proj-card:hover { transform: translateY(-6px); border-color: var(--border-glow); box-shadow: 0 14px 52px rgba(94,181,255,.14); }
+    .proj-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--pink)); opacity: 0; transition: opacity .3s;
+    }
+    .proj-card:hover::after { opacity: 1; }
+    .proj-ico {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(94,181,255,.18), rgba(244,114,182,.1));
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-ico svg { width: 24px; height: 24px; color: var(--teal); }
+    .proj-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--ink); }
+    .proj-desc { font-size: .9rem; font-weight: 300; color: var(--ink-mid); line-height: 1.75; flex: 1; }
+    .proj-tag {
+      display: inline-block; padding: .25rem .8rem;
+      background: var(--teal-dim); border: 1px solid var(--border-glow);
+      border-radius: 100px; font-size: .7rem; color: var(--teal); letter-spacing: .06em; font-weight: 500;
+    }
+    .proj-link {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--teal); text-decoration: none; transition: gap .2s;
+    }
+    .proj-link:hover { gap: .75rem; }
+    .proj-link svg { width: 14px; height: 14px; }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--bg3); }
+    #contact::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 50% 50% at 10% 50%, rgba(94,181,255,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 90% 50%, rgba(244,114,182,.06) 0%, transparent 60%);
+    }
+    .contact-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem; max-width: 760px;
+    }
+    .c-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.6rem; display: flex; align-items: center; gap: 1rem;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .c-card:hover { border-color: var(--border-glow); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(94,181,255,.1); }
+    .c-ico {
+      width: 44px; height: 44px; flex-shrink: 0; border-radius: 12px;
+      background: var(--teal-dim); border: 1px solid var(--border-glow);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .c-ico svg { width: 20px; height: 20px; color: var(--teal); }
+    .c-lbl { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: .2rem; }
+    .c-val { font-size: .88rem; color: var(--ink-mid); word-break: break-all; }
+    .c-val a { color: inherit; text-decoration: none; transition: color .2s; }
+    .c-val a:hover { color: var(--teal); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #050709; border-top: 1px solid rgba(94,181,255,.07);
+      padding: 2rem 6vw;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-size: .8rem; color: var(--ink-muted); position: relative; z-index: 1;
+    }
+    .foot-brand { font-family: 'Playfair Display', serif; font-size: .95rem; color: var(--ink); }
+    .foot-brand span { color: var(--teal); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 480px) {
+      h1 { font-size: 2.8rem; }
+      .hero-actions { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Manisha<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#experience" class="mobile-link">Experience</a>
+  <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Available for opportunities</div>
+    <h1>Manisha<br><span class="hl">Bhandari</span></h1>
+    <p class="hero-sub">English Literature Student — passionate about words, stories, and the human experience they illuminate.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">
+        Get in touch
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#projects" class="btn-ghost">View projects</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <div class="avatar-ring"><div class="avatar-inner">M</div></div>
+      <div class="acard-name">Manisha Bhandari</div>
+      <div class="acard-role">English Literature Student</div>
+      <div class="astat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        Siliguri, West Bengal
+      </div>
+      <div class="astat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        Surya Sen Mahavidyalaya
+      </div>
+    </div>
+    <div>
+      <p class="stag reveal">About Me</p>
+      <h2 class="reveal d1">A love for<br>literature &amp; learning</h2>
+      <div class="ubar reveal d1"></div>
+      <div class="about-text">
+        <p class="reveal d2">I am an <strong>English Literature student</strong> at <strong>Surya Sen Mahavidyalaya</strong> from Siliguri, West Bengal — where the mountains meet the plains and stories flow as freely as the rivers.</p>
+        <p class="reveal d3">I find beauty in the way language shapes thought, moves hearts, and connects humanity across centuries. Every text is a conversation waiting to happen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="stag reveal">Experience</p>
+  <h2 class="reveal d1">What I've been doing</h2>
+  <div class="ubar reveal d1"></div>
+  <div class="exp-card reveal d2">
+    <div class="exp-head">
+      <div class="exp-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div>
+        <div class="exp-role">Community &amp; NGO Volunteer</div>
+        <div class="exp-org">Social Impact Work · Ongoing</div>
+      </div>
+    </div>
+    <p class="exp-desc">I help people through an NGO — making a new discovery every day and learning from each experience. Every interaction teaches me something new about empathy, resilience, and the strength of community. A space where literature truly meets life.</p>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="stag reveal">Projects</p>
+  <h2 class="reveal d1">Things I've built</h2>
+  <div class="ubar reveal d1"></div>
+  <div class="proj-grid">
+    <div class="proj-card reveal d2">
+      <div class="proj-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </div>
+      <div class="proj-name">Book Library App</div>
+      <p class="proj-desc">A digital library to browse, organise, and track books — built from a love of reading and the desire to make literature more accessible to everyone.</p>
+      <div><span class="proj-tag">Web App</span></div>
+      <a href="#" class="proj-link">
+        View project
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="stag reveal">Contact</p>
+  <h2 class="reveal d1">Let's connect</h2>
+  <div class="ubar reveal d1"></div>
+  <div class="contact-grid">
+    <div class="c-card reveal d2">
+      <div class="c-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      </div>
+      <div>
+        <div class="c-lbl">Email</div>
+        <div class="c-val"><a href="mailto:manishabhandari22673@gmail.com">manishabhandari22673@gmail.com</a></div>
+      </div>
+    </div>
+    <div class="c-card reveal d2">
+      <div class="c-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.4 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg>
+      </div>
+      <div>
+        <div class="c-lbl">Phone</div>
+        <div class="c-val">815xxxxxx</div>
+      </div>
+    </div>
+    <div class="c-card reveal d3">
+      <div class="c-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+      </div>
+      <div>
+        <div class="c-lbl">GitHub</div>
+        <div class="c-val"><a href="https://github.com/" target="_blank" rel="noopener">github.com/manisha</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-brand">Manisha<span>.</span></div>
+  <div>© 2025 Manisha Bhandari. All rights reserved.</div>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open'); menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => {
+    btn.classList.remove('open'); menu.classList.remove('open'); document.body.style.overflow = '';
+  }));
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
